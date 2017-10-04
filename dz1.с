@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+char *getdata(char *f)
+{
+	int fd;
+	char *data;
+	fd=open(f,O_RDONLY);
+	data=mmap(0,10,PROT_READ, MAP_SHARED,fd,0);
+	return data;
+}
+
+int wordsstr(char *str)
+{
+	int counter=0;
+	for (int i=0; i!=strlen(str);++i)
+	if (isspace(str[i])||ispunct(str[i]))++counter;
+	return counter;
+}
+
+int main(int argc, char *argv[])
+{
+char **arrfin;
+int indfin=0;
+int k=2;
+while(argv[k])
+{
+	char *data=getdata(argv[k]);
+	char **arr;
+	int ind=0;
+	char *p;
+	char current[strlen(data)];
+	for (int i=0; i!=strlen(data)+1; ++i)
+	current[i]=data[i];
+	int t=wordsstr(data);
+	p=current;
+	for (int w=0; w!=t; ++w)
+	{
+		p=strtok(p,"\n ,.");
+		if(p)
+		strcpy(arr[w],p);
+		p=NULL;
+	}
+	for (int m=0; m!=t; ++m)
+	for (int n=m+1; n!=t; ++n)
+	if (strcmp(arr[m],arr[n])==0) arr[n]="0";
+	for (int s=0; s!=t; ++s)
+	if (strcmp(arr[s],"0")!=0)
+	{
+		strcpy(arrfin[indfin],arr[s]);
+		++indfin;
+	}
+	k++;
+}
+int N=atoi(argv[1]);
+for (int i=0; i<indfin; ++i)
+{
+	int counter=0;
+	for (int j=i+1; j!=indfin; ++j)
+	if (strcmp(arrfin[i],arrfin[j])==0) ++counter;
+	if (counter>N) printf("%s",arrfin[i]);
+}
+return 0;
+}
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
