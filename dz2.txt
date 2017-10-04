@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+double get_elem( double **matr, int row, int col)
+{
+	return matr[row][col];
+}
+void set_elem(double **matr, int row, int col)
+{
+	matr[row][col] = elem;
+}
+
+double find_norm(double **matr, int row, int col)
+{
+	double max = 0;
+	double sum = 0;
+	for (int i=0; i<row;++i)
+	{
+		for (int j=0; j<col;++j)
+		sum +=matr[i][j];
+		if (sum>max) max=sum;
+		sum=0;
+	}
+	return max;
+}
+
+void read_matr(double **input_matr, char *file, int N, int M)
+{
+	FILE *f;
+	f = fopen(file,"r");
+	fscanf(f,"%d\n%d",%N,%M);
+	int i,j;
+	for (i=0; i<N; ++i)
+	for (j=0; j<M; ++j)
+	fscanf(f,"%lf", &input_matr[i][j]);
+	fclose(f);
+}
+
+void print_matr(double **matr, int N, int M)
+{
+	int i,j;
+	for (i=0; i<N;++i)
+	{
+		for (j=0; j<M; ++j)
+		printf("%6.2lf",*(*(matr+i)+j));
+		printf("\n");
+	}
+}
+
+int main (int argc, char *argv[])
+{
+	for (int k=1; k!=argc; ++k)
+	{
+		int i,j;
+		int N,M;
+		FILE *f;
+		f=fopen(argv[k],"r");
+		fscanf(f,"%d\n%d",&N, &M);
+		fclose(f);
+		
+		double **matr;
+		matr = (double **)calloc(M, sizeof(double *));
+		for (int i=0; i<N; ++i)
+		*(matr+i) = (double *)calloc(N,sizeof(double));
+		
+		read_matr(matr, argv[k],N,M);
+		print_matr(matr,N,M);
+		printf("Макс-норма матрицы:");
+		printf("lf\n",find_norm(matr,N,M));
+		free (matr);
+	}
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
